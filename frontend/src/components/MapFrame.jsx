@@ -41,10 +41,11 @@ export default function MapFrame({ center, schools, selectedSchool }) {
     gestureHandling: 'none',
     zoomControl: false,
     clickableIcons: false,
+    mapTypeId: 'satellite',
   };
 
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
+    <div className="fixed inset-0 h-full w-full">
       <Map
         defaultZoom={15}
         defaultCenter={center}
