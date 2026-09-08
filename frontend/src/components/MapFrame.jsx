@@ -1,6 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Map, AdvancedMarker, InfoWindow, Pin, useMap } from '@vis.gl/react-google-maps';
 
+const incidentColors = {
+  Crime: '#ef4444',
+  'Suspicious Activity': '#a216f9',
+  'Medical Emergency': '#aa8208',
+  'Traffic/Accident': '#3b82f6',
+  'Fire/Hazard': '#f79655',
+  'Weather/Environmental': '#22c55e',
+  'Campus Alert': '#111827',
+  Other: '#f8fafc',
+};
+
 function CampusBoxes({ schools, selectedSchool }) {
   const map = useMap();
 
@@ -88,6 +99,7 @@ function ZoomControls() {
 function IncidentMarker({ incident }) {
   const [isHovered, setIsHovered] = useState(false);
   const position = { lat: incident.lat, lng: incident.lng };
+  const color = incidentColors[incident.type] || incidentColors.Other;
 
   return (
     <>
@@ -97,7 +109,7 @@ function IncidentMarker({ incident }) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <Pin background="#EF4444" glyphColor="#000" borderColor="#000" />
+        <Pin background={color} glyphColor="#000" borderColor="#000" />
       </AdvancedMarker>
 
       {isHovered && (

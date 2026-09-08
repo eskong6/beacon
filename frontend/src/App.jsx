@@ -53,15 +53,24 @@ const schools = {
 const incidents = [
   {
     id: 1,
-    title: 'Suspicious activity reported',
-    description: 'Person observed near the student center.',
-    type: 'Suspicious Activity',
+    title: 'Theft reported near student center',
+    description: 'A personal item was reported stolen near the student center.',
+    type: 'Crime',
     lat: 33.6409,
     lng: -117.8412,
     timestamp: '2026-09-07T14:30:00',
   },
   {
     id: 2,
+    title: 'Suspicious activity reported',
+    description: 'Person observed near the student center.',
+    type: 'Suspicious Activity',
+    lat: 33.6416,
+    lng: -117.8388,
+    timestamp: '2026-09-07T14:10:00',
+  },
+  {
+    id: 3,
     title: 'Medical emergency',
     description: 'Medical assistance requested near the library.',
     type: 'Medical Emergency',
@@ -69,10 +78,66 @@ const incidents = [
     lng: -117.8375,
     timestamp: '2026-09-07T13:15:00',
   },
+  {
+    id: 4,
+    title: 'Traffic collision reported',
+    description: 'Minor collision reported near the campus entrance.',
+    type: 'Traffic/Accident',
+    lat: 33.6388,
+    lng: -117.8428,
+    timestamp: '2026-09-07T12:45:00',
+  },
+  {
+    id: 5,
+    title: 'Smoke reported near engineering hall',
+    description: 'Smoke was reported near an exterior service area.',
+    type: 'Fire/Hazard',
+    lat: 33.6434,
+    lng: -117.8368,
+    timestamp: '2026-09-07T11:55:00',
+  },
+  {
+    id: 6,
+    title: 'Flooding reported after rainfall',
+    description: 'Standing water reported along a campus walkway.',
+    type: 'Weather/Environmental',
+    lat: 33.6395,
+    lng: -117.8358,
+    timestamp: '2026-09-07T10:40:00',
+  },
+  {
+    id: 7,
+    title: 'Campus safety alert',
+    description: 'Campus safety issued an alert for increased awareness.',
+    type: 'Campus Alert',
+    lat: 33.6428,
+    lng: -117.8402,
+    timestamp: '2026-09-07T09:30:00',
+  },
+  {
+    id: 8,
+    title: 'Lost item reported',
+    description: 'A lost backpack was reported near the recreation center.',
+    type: 'Other',
+    lat: 33.6378,
+    lng: -117.8378,
+    timestamp: '2026-09-07T08:50:00',
+  },
+];
+
+const incidentCategories = [
+  { label: 'Crime', color: '#ef4444' },
+  { label: 'Suspicious Activity', color: '#a216f9' },
+  { label: 'Medical Emergency', color: '#aa8208' },
+  { label: 'Traffic/Accident', color: '#3b82f6' },
+  { label: 'Fire/Hazard', color: '#f79655' },
+  { label: 'Weather/Environmental', color: '#22c55e' },
+  { label: 'Campus Alert', color: '#111827' },
+  { label: 'Other', color: '#f8fafc' },
 ];
 
 function App() {
-  const [selectedSchool, setSelectedSchool] = useState('CSULB');
+  const [selectedSchool, setSelectedSchool] = useState('UCI');
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef(null);
   const position = schools[selectedSchool].position;
@@ -176,6 +241,24 @@ function App() {
         <div className="flex items-center gap-3">
           <img src={beaconIcon} alt="" className="h-9 w-9" />
           <h1 className="text-3xl font-bold text-white">BEACON</h1>
+        </div>
+      </div>
+
+      <div className="fixed right-4 top-24 z-30 w-56 rounded-2xl border border-white/10 bg-slate-900/85 p-3 shadow-[0_8px_30px_rgba(0,0,0,0.45)] backdrop-blur-xl">
+        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-400">
+          Incident categories
+        </p>
+        <div className="grid grid-cols-1 gap-1.5">
+          {incidentCategories.map((category) => (
+            <div key={category.label} className="flex items-center gap-2 text-xs text-slate-200">
+              <span
+                aria-hidden="true"
+                className="h-2.5 w-2.5 shrink-0 rounded-full border border-white/40"
+                style={{ backgroundColor: category.color }}
+              />
+              <span>{category.label}</span>
+            </div>
+          ))}
         </div>
       </div>
 
