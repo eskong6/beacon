@@ -33,12 +33,63 @@ function CampusBoxes({ schools, selectedSchool }) {
   return null;
 }
 
+function RecenterMap({ center }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map) {
+      return;
+    }
+
+    map.panTo(center);
+  }, [map, center]);
+
+  return null;
+}
+
+function ZoomControls() {
+  const map = useMap();
+
+  const changeZoom = (amount) => {
+    if (!map) {
+      return;
+    }
+
+    const currentZoom = map.getZoom() ?? 15;
+    map.setZoom(Math.min(21, Math.max(10, currentZoom + amount)));
+  };
+
+  return (
+    <div className="fixed right-6 top-24 z-10 flex flex-col overflow-hidden rounded-xl border border-white/10 bg-slate-900/80 shadow-[0_8px_30px_rgba(0,0,0,0.45)] backdrop-blur-xl">
+      <button
+        type="button"
+        aria-label="Zoom in"
+        title="Zoom in"
+        onClick={() => changeZoom(1)}
+        className="flex h-11 w-11 items-center justify-center text-2xl text-white transition-colors hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-400"
+      >
+        +
+      </button>
+      <div className="h-px bg-white/10" />
+      <button
+        type="button"
+        aria-label="Zoom out"
+        title="Zoom out"
+        onClick={() => changeZoom(-1)}
+        className="flex h-11 w-11 items-center justify-center text-2xl text-white transition-colors hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-400"
+      >
+        −
+      </button>
+    </div>
+  );
+}
+
 export default function MapFrame({ center, schools, selectedSchool }) {
   const mapOptions = {
     disableDefaultUI: true,
-    draggable: false,
-    scrollwheel: false,
-    gestureHandling: 'none',
+    draggable: true,
+    scrollwheel: true,
+    gestureHandling: 'greedy',
     zoomControl: false,
     clickableIcons: false,
     mapTypeId: 'satellite',
@@ -49,11 +100,12 @@ export default function MapFrame({ center, schools, selectedSchool }) {
       <Map
         defaultZoom={15}
         defaultCenter={center}
-        center={center}
         options={mapOptions}
         mapId="YOUR_MAP_ID"
       >
         <CampusBoxes schools={schools} selectedSchool={selectedSchool} />
+        <RecenterMap center={center} />
+        <ZoomControls />
         <AdvancedMarker position={center}>
           <Pin background={'#FBBC05'} glyphColor={'#000'} borderColor={'#000'} />
         </AdvancedMarker>
