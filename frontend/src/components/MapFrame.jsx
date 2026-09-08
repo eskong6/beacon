@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Map, AdvancedMarker, Pin, useMap } from '@vis.gl/react-google-maps';
+import { useEffect, useState } from 'react';
+import { Map, AdvancedMarker, InfoWindow, Pin, useMap } from '@vis.gl/react-google-maps';
 
 function CampusBoxes({ schools, selectedSchool }) {
   const map = useMap();
@@ -20,6 +20,7 @@ function CampusBoxes({ schools, selectedSchool }) {
         strokeColor: isSelected ? '#0ea5e9' : '#f59e0b',
         strokeOpacity: 0.95,
         strokeWeight: isSelected ? 3 : 2,
+        zIndex: 1,
       });
 
       return rectangle;
@@ -84,7 +85,44 @@ function ZoomControls() {
   );
 }
 
-export default function MapFrame({ center, schools, selectedSchool }) {
+function IncidentMarker({ incident }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const position = { lat: incident.lat, lng: incident.lng };
+
+  return (
+    <>
+      <AdvancedMarker
+        position={position}
+        zIndex={1000}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <Pin background="#EF4444" glyphColor="#000" borderColor="#000" />
+      </AdvancedMarker>
+
+      {isHovered && (
+        <InfoWindow position={position} pixelOffset={[0, -38]}>
+          <div className="w-52 text-slate-900">
+            <p className="font-bold">{incident.title}</p>
+            <p className="mt-1">{incident.description}</p>
+            <p className="mt-2 text-slate-600">{incident.type}</p>
+            <p className="text-slate-600">
+              {new Date(incident.timestamp).toLocaleString()}
+            </p>
+          </div>
+        </InfoWindow>
+      )}
+    </>
+  );
+}
+
+
+export default function MapFrame({
+  center,
+  schools,
+  selectedSchool,
+  incidents
+ }) {
   const mapOptions = {
     disableDefaultUI: true,
     draggable: true,
@@ -109,6 +147,9 @@ export default function MapFrame({ center, schools, selectedSchool }) {
         <AdvancedMarker position={center}>
           <Pin background={'#FBBC05'} glyphColor={'#000'} borderColor={'#000'} />
         </AdvancedMarker>
+        {incidents.map((incident) => (
+          <IncidentMarker key={incident.id} incident={incident} />
+        ))}
       </Map>
     </div>
   );

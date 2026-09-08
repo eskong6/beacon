@@ -50,6 +50,27 @@ const schools = {
   },
 };
 
+const incidents = [
+  {
+    id: 1,
+    title: 'Suspicious activity reported',
+    description: 'Person observed near the student center.',
+    type: 'Suspicious Activity',
+    lat: 33.6409,
+    lng: -117.8412,
+    timestamp: '2026-09-07T14:30:00',
+  },
+  {
+    id: 2,
+    title: 'Medical emergency',
+    description: 'Medical assistance requested near the library.',
+    type: 'Medical Emergency',
+    lat: 33.6418,
+    lng: -117.8375,
+    timestamp: '2026-09-07T13:15:00',
+  },
+];
+
 function App() {
   const [selectedSchool, setSelectedSchool] = useState('CSULB');
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -83,7 +104,7 @@ function App() {
 
   return (
     <div className="relative min-h-screen bg-slate-950 text-slate-100">
-      <MapFrame center={position} schools={schools} selectedSchool={selectedSchool} />
+      <MapFrame center={position} schools={schools} selectedSchool={selectedSchool} incidents={incidents} />
 
       <div className="fixed inset-x-0 top-0 z-20 flex h-20 items-center justify-between gap-3 bg-black px-6">
         <div className="relative" ref={profileMenuRef}>
